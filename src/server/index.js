@@ -14,6 +14,10 @@ function runExpress({ port, password }) {
   app.use(bodyParser.json());
   app.use("/v1", v1);
   app.use(applyPassword);
+
+  app.get("/", (req, res) =>
+    res.status(404).send({ message: "No path specified" })
+  );
   app.listen(port, () => {
     console.log(`Pipe server running on ${port}`);
   });
