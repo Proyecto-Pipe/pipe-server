@@ -1,11 +1,11 @@
 {
   "name": "server",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "run": "node src/index.js",
+    "start": "node src/index.js",
     "test": "nodemon src/index.js"
   },
   "keywords": [],
