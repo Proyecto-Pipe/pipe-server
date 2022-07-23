@@ -4,6 +4,6 @@ dotenv.config();
 import { runExpress } from "./server/index.js";
 
 const password = process.env.PASSWORD;
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 runExpress({ port, password });
