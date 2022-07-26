@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 
 let pipeVariables = {
-  humity: undefined,
+  humidity: undefined,
   temperature: undefined,
   light: undefined,
   isBulbOn: undefined,
