@@ -7,7 +7,6 @@ let pipeVariables = {
   light: undefined,
   isBulbOn: undefined,
   isPumpOn: undefined,
-  // [sec, min, hou, day, mont, yea]
   lastPipeConection: undefined,
 };
 
@@ -24,6 +23,7 @@ router.post("/pipe", (req, res) => {
   pipeVariables.light = body.light;
   pipeVariables.isBulbOn = body.isBulbOn;
   pipeVariables.isPumpOn = body.isPumpOn;
+  pipeVariables.lastPipeConection = Date.now();
 
   res.status(203).send({ message: "Updated pipe" });
 });
