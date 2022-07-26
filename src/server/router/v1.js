@@ -13,7 +13,7 @@ let pipeVariables = {
 
 router.get("/pipe", (req, res) => {
   if (pipeVariables.lastPipeConection == undefined)
-    return res.status(500).send({ message: "No pipe comunication" });
+    return res.status(200).send({ message: "No pipe comunication" });
   res.send(pipeVariables);
 });
 
