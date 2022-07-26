@@ -19,7 +19,7 @@ router.get("/pipe", (req, res) => {
 
 router.post("/pipe", (req, res) => {
   const { body } = req;
-  pipeVariables.humity = body.humity;
+  pipeVariables.humidity = body.humidity;
   pipeVariables.temperature = body.temperature;
   pipeVariables.light = body.light;
   pipeVariables.isBulbOn = body.isBulbOn;
