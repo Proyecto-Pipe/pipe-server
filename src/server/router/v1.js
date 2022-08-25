@@ -13,8 +13,8 @@ let pipeVariables = {
 router.get("/pipe", (req, res) => {
   const pipeVariablesString = JSON.stringify(pipeVariables);
   res.type("json");
-  req.header("User-Agent");
-  req.set("Content-Length", Buffer.byteLength(pipeVariablesString, "utf-8"));
+  res.header("User-Agent");
+  res.set("Content-Length", Buffer.byteLength(pipeVariablesString, "utf-8"));
   if (pipeVariables.lastPipeConnection == undefined)
     return res.status(200).send({ message: "No pipe comunication" });
   res.send(pipeVariablesString);
