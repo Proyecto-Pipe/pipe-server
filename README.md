@@ -1,3 +1,4 @@
+### pipe-server
 # P.I.P.E
 
 [![Logo de Pipe](https://raw.githubusercontent.com/santigo171/pipe-frontend/main/src/assets/logo.png "Logo de Pipe")](# "Logo de Pipe")
@@ -22,9 +23,56 @@ El código de P.I.P.E está dividido en 3 partes. **En cada uno de los repositor
 
 - **[pipe-arduino:][pipe-arduino]** Sketch de Arduino programado en C++. Su función es recolectar mediante sensores y posteriormente enviar al servidor la humedad, temperatura y luminosidad del invernadero y verifica cada determinado tiempo si en el servidor hay una petición pendiente para activar una bombilla o una bomba de agua. Este corre en cualquier placa de desarrollo, se recomienda ESP 32.
 
-- **[pipe-server:][pipe-server]** Servidor escrito con Node.js. Este recibe los datos (humedad, temperatura, luminosidad) de la placa y los envía al frontend del usuario mediante una API. Mediante la misma API recibe las peticiones (activar bombilla, activar bomba de agua) del usuario para que la placa procese y ejecute. Corre en cualquier servicio de hosting que soporte Javascript.
+- **pipe-server:** Servidor escrito con Node.js. Este recibe los datos (humedad, temperatura, luminosidad) de la placa y los envía al frontend del usuario mediante una API. Mediante la misma API recibe las peticiones (activar bombilla, activar bomba de agua) del usuario para que la placa procese y ejecute. Corre en cualquier servicio de hosting que soporte Javascript.
 
 - **[pipe-frontend:][pipe-frontend]** Página web programada con React. Muestra los datos del invernadero y envía las peticiones al servidor. Es hosteado mediante Github Pages.
+
+## Documentación pipe-server
+Servidor escrito en Node.js hosteado actualmente en Heroku.
+
+**Base Url:** https://pipe-server.herokuapp.com/
+**Nota**: Cualquier endpoint debe tener en el header el parámetro password, el cual siempre será de tipo entero : ``` headers: { password: 0000 }```.
+**Endpoints:**
+```
+GET /v1/pipe
+```
+Si hay comunicación con pipe-arduino, es decir, ```lastPipeConnection !== undefined```, retorna las variables del invernadero en el siguiente formato:
+```json
+ {
+	humidity: 42,
+	temperature: 12,
+	light: 80,
+	isBulbOn: 0,
+	isPumpOn: 0,
+	lastPipeConnection: 1662664320220 // Date.now()
+}
+```
+De lo contrario, retorna:
+```json
+{
+	message: "No pipe comunication"
+}
+```
+------------
+```
+POST /v1/pipe
+```
+El post debe incluir el body con los datos a modificar:
+```json
+ {
+	humidity: 42,
+	temperature: 12,
+	light: 80,
+	isBulbOn: 0,
+	isPumpOn: 0
+}
+```
+Una vez efectuado el cambio internamente, se retornará:
+```json
+{
+	message: "Updated pipe"
+}
+```
 
 ## Autores
 
