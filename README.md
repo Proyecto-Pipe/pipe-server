@@ -39,18 +39,18 @@ GET /v1/pipe
 Si hay comunicación con pipe-arduino, es decir, ```lastPipeConnection !== undefined```, retorna las variables del invernadero en el siguiente formato:
 ```json
  {
-	humidity: 42,
-	temperature: 12,
-	light: 80,
-	isBulbOn: 0,
-	isPumpOn: 0,
-	lastPipeConnection: 1662664320220 // Date.now()
+	"humidity": 42,
+	"temperature": 12,
+	"light": 80,
+	"isBulbOn": 0,
+	"isPumpOn": 0,
+	"lastPipeConnection": 1662664320220 // Date.now()
 }
 ```
 De lo contrario, retorna:
 ```json
 {
-	message: "No pipe comunication"
+	"message": "No pipe comunication"
 }
 ```
 ------------
@@ -60,17 +60,17 @@ POST /v1/pipe
 El post debe incluir el body con los datos a modificar:
 ```json
  {
-	humidity: 42,
-	temperature: 12,
-	light: 80,
-	isBulbOn: 0,
-	isPumpOn: 0
+	"humidity": 42,
+	"temperature": 12,
+	"light": 80,
+	"isBulbOn": 0,
+	"isPumpOn": 0
 }
 ```
 Una vez efectuado el cambio internamente, se retornará:
 ```json
 {
-	message: "Updated pipe"
+	"message": "Updated pipe"
 }
 ```
 
