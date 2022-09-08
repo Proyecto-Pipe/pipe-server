@@ -30,6 +30,7 @@ El código de P.I.P.E está dividido en 3 partes. **En cada uno de los repositor
 ## Documentación pipe-server
 Servidor escrito en Node.js hosteado actualmente en Heroku.
 
+### REST API
 **Base Url:** https://pipe-server.herokuapp.com/
 **Nota**: Cualquier endpoint debe tener en el header el parámetro password, el cual siempre será de tipo entero : ``` headers: { password: 0000 }```.
 **Endpoints:**
@@ -73,6 +74,11 @@ Una vez efectuado el cambio internamente, se retornará:
 	"message": "Updated pipe"
 }
 ```
+
+### Funcionamiento interno
+La REST API admite varias versiones. Actualmente solo está disponible v1.
+#### V1
+Una vez iniciada la versión ```/v1``` , declara la variable  ```pipeVariables``` donde guarda el estado de las variables del proyecto. Dichas variables son modificadas por las peticiones **POST** al endpoint ```/v1/pipe```.
 
 ## Autores
 
