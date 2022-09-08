@@ -32,7 +32,9 @@ Servidor escrito en Node.js hosteado actualmente en Heroku.
 
 ### REST API
 **Base Url:** https://pipe-server.herokuapp.com/
-**Nota**: Cualquier endpoint debe tener en el header el parámetro password, el cual siempre será de tipo entero : ``` headers: { password: 0000 }```.
+
+**Nota**: Cualquier endpoint debe tener en el header el parámetro password, el cual siempre será de tipo entero ``` headers: { password: 0000 }```.
+
 **Endpoints:**
 ```
 GET /v1/pipe
