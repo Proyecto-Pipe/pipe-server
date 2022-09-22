@@ -2,10 +2,12 @@ import express from "express";
 const router = express.Router();
 
 let pipeVariables = {
-  humidity: undefined,
+  airHumidity: undefined,
+  soilHumidity: undefined,
   temperature: undefined,
   light: undefined,
   isBulbOn: undefined,
+  isFanOn: undefined,
   isPumpOn: undefined,
   lastPipeConnection: undefined,
 };
@@ -22,10 +24,12 @@ router.get("/pipe", (req, res) => {
 
 router.post("/pipe", (req, res) => {
   const { body } = req;
-  pipeVariables.humidity = body.humidity;
+  pipeVariables.airHumidity = body.airHumidity;
+  pipeVariables.soilHumidity = body.soilHumidity;
   pipeVariables.temperature = body.temperature;
   pipeVariables.light = body.light;
   pipeVariables.isBulbOn = body.isBulbOn;
+  pipeVariables.isFanOn = body.isFanOn;
   pipeVariables.isPumpOn = body.isPumpOn;
   pipeVariables.lastPipeConnection = Date.now();
 
