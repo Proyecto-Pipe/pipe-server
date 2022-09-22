@@ -31,7 +31,7 @@ router.post("/pipe", (req, res) => {
   pipeVariables.isBulbOn = body.isBulbOn;
   pipeVariables.isFanOn = body.isFanOn;
   pipeVariables.isPumpOn = body.isPumpOn;
-  pipeVariables.lastPipeConnection = Date.now();
+  if (!body.isClient) pipeVariables.lastPipeConnection = Date.now();
 
   res.status(203).send({ message: "Updated pipe" });
 });
