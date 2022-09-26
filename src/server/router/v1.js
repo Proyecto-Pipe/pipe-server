@@ -45,6 +45,7 @@ router.post("/pipe", (req, res) => {
     pipeVariables.soilHumidity = body.soilHumidity;
     pipeVariables.temperature = body.temperature;
     pipeVariables.light = body.light;
+    pipeVariables.lastPipeConnection = Date.now();
   } else if (Boolean(headers["is-client"]) == true) {
     pipeVariables.isBulbOn = body.isBulbOn;
     pipeVariables.isFanOn = body.isFanOn;
