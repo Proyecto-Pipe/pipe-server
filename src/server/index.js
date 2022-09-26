@@ -21,7 +21,7 @@ console.log("Cors Whitelist: " + corsWhitelist);
 
 function runExpress({ port, password }) {
   function applyPassword(req, res, next) {
-    if (parseInt(req.headers.password) !== password)
+    if (parseInt(req.headers["password"]) !== password)
       return res.status(403).send({ message: "Unauthorized" });
     else next();
   }
@@ -29,8 +29,6 @@ function runExpress({ port, password }) {
   app.use(
     cors.default({
       origin: (origin, callback) => {
-        console.log(origin);
-        console.log(corsWhitelist.indexOf(origin) !== -1 || !origin);
         if (corsWhitelist.indexOf(origin) !== -1 || !origin) {
           callback(null, true);
         } else {
