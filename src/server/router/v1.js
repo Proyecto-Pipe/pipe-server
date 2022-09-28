@@ -45,6 +45,7 @@ router.get("/pipe", (req, res) => {
   if (pipeVariables.lastPipeConnection == undefined)
     return res.status(200).send({ message: "No pipe comunication" });
   res.send(responseString);
+  console.log(pipeVariables);
 });
 
 router.post("/pipe", (req, res) => {
@@ -62,6 +63,7 @@ router.post("/pipe", (req, res) => {
     pipeVariables.isPumpOn = body.isPumpOn;
     res.status(203).send({ pipeVariables });
   }
+  console.log(pipeVariables);
 });
 
 export { router as v1 };
