@@ -15,6 +15,15 @@ let pipeVariables = {
 router.get("/pipe", (req, res) => {
   const { headers } = req;
   let responseString;
+  if (isNaN(pipeVariables.isBulbOn)) {
+    pipeVariables.isBulbOn = 0;
+  }
+  if (isNaN(pipeVariables.isFanOn)) {
+    pipeVariables.isFanOn = 0;
+  }
+  if (isNaN(pipeVariables.isPumpOn)) {
+    pipeVariables.isPumpOn = 0;
+  }
 
   if (Boolean(headers["is-pipe"]) == true) {
     responseString = JSON.stringify({
