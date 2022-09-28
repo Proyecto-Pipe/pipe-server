@@ -6,9 +6,9 @@ let pipeVariables = {
   soilHumidity: undefined,
   temperature: undefined,
   light: undefined,
-  isBulbOn: undefined,
-  isFanOn: undefined,
-  isPumpOn: undefined,
+  isBulbOn: 0,
+  isFanOn: 0,
+  isPumpOn: 0,
   lastPipeConnection: undefined,
 };
 
