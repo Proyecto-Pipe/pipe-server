@@ -55,13 +55,13 @@ router.post("/pipe", (req, res) => {
     pipeVariables.temperature = parseFloat(body.temperature).toFixed(2);
     pipeVariables.light = parseFloat(body.light).toFixed(2);
     pipeVariables.lastPipeConnection = Date.now();
+    res.status(203).send({ pipeVariables });
   } else if (Boolean(headers["is-client"]) == true) {
     pipeVariables.isBulbOn = body.isBulbOn;
     pipeVariables.isFanOn = body.isFanOn;
     pipeVariables.isPumpOn = body.isPumpOn;
+    res.status(203).send({ pipeVariables });
   }
-
-  res.status(203).send({ message: "Updated pipe" });
 });
 
 export { router as v1 };
