@@ -41,10 +41,10 @@ router.get("/pipe", (req, res) => {
 router.post("/pipe", (req, res) => {
   const { body, headers } = req;
   if (Boolean(headers["is-pipe"]) == true) {
-    pipeVariables.airHumidity = body.airHumidity;
-    pipeVariables.soilHumidity = body.soilHumidity;
-    pipeVariables.temperature = body.temperature;
-    pipeVariables.light = body.light;
+    pipeVariables.airHumidity = body.airHumidity.toFixed(2);
+    pipeVariables.soilHumidity = body.soilHumidity.toFixed(2);
+    pipeVariables.temperature = body.temperature.toFixed(2);
+    pipeVariables.light = body.light.toFixed(2);
     pipeVariables.lastPipeConnection = Date.now();
   } else if (Boolean(headers["is-client"]) == true) {
     pipeVariables.isBulbOn = body.isBulbOn;
