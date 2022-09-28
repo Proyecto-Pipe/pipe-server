@@ -39,8 +39,8 @@ function runExpress({ port, password }) {
   );
 
   app.use(bodyParser.json());
-  app.use("/v1", v1);
   app.use(applyPassword);
+  app.use("/v1", v1);
 
   app.get("/", (req, res) =>
     res.status(404).send({ message: "No path specified" })
