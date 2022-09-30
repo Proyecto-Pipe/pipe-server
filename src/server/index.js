@@ -12,7 +12,10 @@ const dev_mode = parseInt(process.env.DEV_MODE);
 console.log("Dev mode: ");
 console.log(dev_mode === 1 ? true : false);
 
-let corsWhitelist = ["https://santigo171.github.io/"];
+let corsWhitelist = [
+  "https://proyecto-pipe.github.io/pipe-frontend/",
+  "https://proyecto-pipe.github.io/pipe-frontend",
+];
 
 if (dev_mode === 1) corsWhitelist.push(process.env.DEV_URL1);
 if (dev_mode === 1) corsWhitelist.push(process.env.DEV_URL2);
