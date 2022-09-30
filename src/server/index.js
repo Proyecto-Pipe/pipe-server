@@ -13,8 +13,8 @@ console.log("Dev mode: ");
 console.log(dev_mode === 1 ? true : false);
 
 let corsWhitelist = [
-  "https://proyecto-pipe.github.io/pipe-frontend/",
-  "https://proyecto-pipe.github.io/pipe-frontend",
+  "https://proyecto-pipe.github.io",
+  "https://proyecto-pipe.github.io/",
 ];
 
 if (dev_mode === 1) corsWhitelist.push(process.env.DEV_URL1);
