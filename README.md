@@ -2,11 +2,11 @@
 
 # P.I.P.E
 
-[![Logo de Pipe](https://raw.githubusercontent.com/santigo171/pipe-frontend/main/src/assets/logo.png "Logo de Pipe")](# "Logo de Pipe")
+[![Logo de Pipe](https://raw.githubusercontent.com/Proyecto-Pipe/pipe-frontend/main/public/logo.png "Logo de Pipe")](# "Logo de Pipe")
 
 ### Proyecto Invernadero Pedagógico Estudiantil
 
-Presentación el proyecto: https://drive.google.com/file/d/1l-ndVBoZgVm_VMkF270SU4DZTlN-6F5f/view?usp=sharing
+Presentación el proyecto: https://youtu.be/kD3DB3PJZvg
 
 **P.I.P.E** es un invernadero inteligente enfocado a instituciones educativas que busca promover en sus estudiantes un compromiso hacia el medio ambiente.
 
@@ -20,7 +20,7 @@ Presentación el proyecto: https://drive.google.com/file/d/1l-ndVBoZgVm_VMkF270S
 
 El código de P.I.P.E está dividido en 3 partes. **En cada uno de los repositorios se encuentra documentación más detallada**.
 
-[![documentacion imagen](https://i.ibb.co/TmvpHF7/Screenshot-153.jpg "documentacion imagen")](# "documentacion imagen")
+[![documentacion imagen](https://github.com/Proyecto-Pipe/.github/blob/main/pipe-architecture.jpg?raw=true "documentacion imagen")](# "documentacion imagen")
 
 - **[pipe-arduino:][pipe-arduino]** Sketch de Arduino programado en C++. Su función es recolectar mediante sensores y posteriormente enviar al servidor la humedad, temperatura y luminosidad del invernadero y verifica cada determinado tiempo si en el servidor hay una petición pendiente para activar una bombilla o una bomba de agua. Este corre en cualquier placa de desarrollo, se recomienda ESP 32.
 
