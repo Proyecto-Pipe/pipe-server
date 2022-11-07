@@ -9,6 +9,7 @@ let pipeVariables = {
   isBulbOn: 0,
   isFanOn: 0,
   isPumpOn: 0,
+  automation: 0,
   lastPipeConnection: undefined,
 };
 
@@ -24,12 +25,16 @@ router.get("/pipe", (req, res) => {
   if (isNaN(pipeVariables.isPumpOn)) {
     pipeVariables.isPumpOn = 0;
   }
+  if (isNaN(pipeVariables.automation)) {
+    pipeVariables.automation = 0;
+  }
 
   if (Boolean(headers["is-pipe"]) == true) {
     responseString = JSON.stringify({
       isBulbOn: pipeVariables.isBulbOn,
       isFanOn: pipeVariables.isFanOn,
       isPumpOn: pipeVariables.isPumpOn,
+      automation: pipeVariables.automation,
     });
   } else if (Boolean(headers["is-client"]) == true) {
     responseString = JSON.stringify(pipeVariables);
@@ -61,6 +66,7 @@ router.post("/pipe", (req, res) => {
     pipeVariables.isBulbOn = body.isBulbOn;
     pipeVariables.isFanOn = body.isFanOn;
     pipeVariables.isPumpOn = body.isPumpOn;
+    pipeVariables.automation = body.automation;
     res.status(203).send({ pipeVariables });
   }
   console.log(pipeVariables);
