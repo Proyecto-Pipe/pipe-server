@@ -3,26 +3,9 @@ const app = express();
 import bodyParser from "body-parser";
 import * as cors from "cors";
 
-import * as dotenv from "dotenv";
-dotenv.config();
-
 import { v1 } from "./router/v1.js";
 
-const dev_mode = parseInt(process.env.DEV_MODE);
-console.log("Dev mode: ");
-console.log(dev_mode === 1 ? true : false);
-
-let corsWhitelist = [
-  "https://proyecto-pipe.github.io",
-  "https://proyecto-pipe.github.io/",
-];
-
-if (dev_mode === 1) corsWhitelist.push(process.env.DEV_URL1);
-if (dev_mode === 1) corsWhitelist.push(process.env.DEV_URL2);
-
-console.log("Cors Whitelist: " + corsWhitelist);
-
-function runExpress({ port, password }) {
+function runExpress({ port, password, corsWhitelist }) {
   function applyPassword(req, res, next) {
     if (parseInt(req.headers["password"]) !== password)
       return res.status(403).send({ message: "Unauthorized" });
