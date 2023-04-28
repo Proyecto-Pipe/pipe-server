@@ -36,10 +36,7 @@ function connectToDb({ database, host, user, password, pipePrototypeId }) {
 
 function datetimeNow() {
   // https://stackoverflow.com/questions/5129624/convert-js-date-time-to-mysql-datetime#comment92061514_11150727
-  const d = new Date();
-  const formattedDate =
-    d.toISOString().split("T")[0] + " " + d.toTimeString().split(" ")[0];
-  return formattedDate;
+  return new Date().toISOString().slice(0, 19).replace("T", " ");
 }
 
 function pullVariableRecord({ date1, date2 }, pipeId = PIPE_PROTOTYPE_ID) {
