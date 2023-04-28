@@ -17,7 +17,7 @@ router.get("/pipe", async (req, res) => {
     responseString = JSON.stringify(processRecord[0]);
   } else if (Boolean(headers["is-client"]) == true) {
     const processRecord = await pullProcessRecord({});
-    const variableRecord = await pullVariableRecord();
+    const variableRecord = await pullVariableRecord({});
     responseString = JSON.stringify({ variableRecord, processRecord });
   } else {
     return res.send({
