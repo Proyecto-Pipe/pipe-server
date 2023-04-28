@@ -2,6 +2,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import { runExpress } from "./server/index.js";
+import { connectToDb } from "./server/db.js";
 
 const password = parseInt(process.env.PASSWORD);
 const port = process.env.PORT || 5000;
@@ -20,3 +21,11 @@ if (dev_mode === 1) corsWhitelist.push(process.env.DEV_URL2);
 console.log("Cors Whitelist: " + corsWhitelist);
 
 runExpress({ port, password, corsWhitelist });
+
+connectToDb({
+  database: process.env.DB_SCHEMA,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  pipePrototypeId: process.env.PIPE_PROTOTYPE_ID,
+});

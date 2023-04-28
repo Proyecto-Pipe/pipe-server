@@ -1,43 +1,23 @@
+import {
+  pullVariableRecord,
+  pullProcessRecord,
+  fetchVariableRecord,
+  fetchProcessRecord,
+} from "../db.js";
+
 import express from "express";
 const router = express.Router();
 
-let pipeVariables = {
-  airHumidity: undefined,
-  soilHumidity: undefined,
-  temperature: undefined,
-  light: undefined,
-  isBulbOn: 0,
-  isFanOn: 0,
-  isPumpOn: 0,
-  automation: 0,
-  lastPipeConnection: undefined,
-};
-
-router.get("/pipe", (req, res) => {
+router.get("/pipe", async (req, res) => {
   const { headers } = req;
   let responseString;
-  if (isNaN(pipeVariables.isBulbOn)) {
-    pipeVariables.isBulbOn = 0;
-  }
-  if (isNaN(pipeVariables.isFanOn)) {
-    pipeVariables.isFanOn = 0;
-  }
-  if (isNaN(pipeVariables.isPumpOn)) {
-    pipeVariables.isPumpOn = 0;
-  }
-  if (isNaN(pipeVariables.automation)) {
-    pipeVariables.automation = 0;
-  }
 
+  const processRecord = await pullProcessRecord();
   if (Boolean(headers["is-pipe"]) == true) {
-    responseString = JSON.stringify({
-      isBulbOn: pipeVariables.isBulbOn,
-      isFanOn: pipeVariables.isFanOn,
-      isPumpOn: pipeVariables.isPumpOn,
-      automation: pipeVariables.automation,
-    });
+    responseString = JSON.stringify(processRecord);
   } else if (Boolean(headers["is-client"]) == true) {
-    responseString = JSON.stringify(pipeVariables);
+    const variableRecord = await pullVariableRecord();
+    responseString = JSON.stringify({ variableRecord, processRecord });
   } else {
     return res.send({
       message: 'Must send in header "is-pipe" or "is-client"',
@@ -46,30 +26,28 @@ router.get("/pipe", (req, res) => {
 
   res.type("json");
   res.set("Content-Length", Buffer.byteLength(responseString, "utf-8"));
-
-  if (pipeVariables.lastPipeConnection == undefined)
-    return res.status(200).send({ message: "No pipe comunication" });
-  res.send(responseString);
-  console.log(pipeVariables);
+  res.status(200).send(responseString);
 });
 
-router.post("/pipe", (req, res) => {
+router.post("/pipe", async (req, res) => {
   const { body, headers } = req;
   if (Boolean(headers["is-pipe"]) == true) {
-    pipeVariables.airHumidity = parseFloat(body.airHumidity).toFixed(2);
-    pipeVariables.soilHumidity = parseFloat(body.soilHumidity).toFixed(2);
-    pipeVariables.temperature = parseFloat(body.temperature).toFixed(2);
-    pipeVariables.light = parseFloat(body.light).toFixed(2);
-    pipeVariables.lastPipeConnection = Date.now();
-    res.status(203).send({ pipeVariables });
+    const response = await fetchVariableRecord({
+      airHumidity: parseFloat(body.airHumidity).toFixed(2),
+      soilHumidity: parseFloat(body.soilHumidity).toFixed(2),
+      temperature: parseFloat(body.temperature).toFixed(2),
+      light: parseFloat(body.light).toFixed(2),
+    });
+    res.status(203).send(response);
   } else if (Boolean(headers["is-client"]) == true) {
-    pipeVariables.isBulbOn = body.isBulbOn;
-    pipeVariables.isFanOn = body.isFanOn;
-    pipeVariables.isPumpOn = body.isPumpOn;
-    pipeVariables.automation = body.automation;
-    res.status(203).send({ pipeVariables });
+    const response = await fetchProcessRecord({
+      isBulbOn: body.isBulbOn,
+      isFanOn: body.isFanOn,
+      isPumpOn: body.isPumpOn,
+      automation: body.automation,
+    });
+    res.status(203).send(response);
   }
-  console.log(pipeVariables);
 });
 
 export { router as v1 };
