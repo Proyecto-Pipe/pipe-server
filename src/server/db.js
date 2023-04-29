@@ -16,6 +16,8 @@ function connectToDb({ database, host, user, password, pipePrototypeId }) {
     password,
     waitForConnections: true,
     connectionLimit: 10,
+    keepAliveInitialDelay: 10000,
+    enableKeepAlive: true,
     dateStrings: true,
   });
   pool.getConnection((error, connection) => {
