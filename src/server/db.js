@@ -27,9 +27,9 @@ function connectToDb({ database, host, user, password, pipePrototypeId }) {
     query = (sql) => {
       return new Promise((resolve, reject) => {
         connection.query(sql, (error, result) => {
+          pool.releaseConnection(connection);
           if (error) reject(error);
           resolve(result);
-          pool.releaseConnection(connection);
         });
       });
     };
