@@ -10,7 +10,7 @@ const router = express.Router();
 
 // no piperecords code:
 let lastClientConnection;
-const CLIENT_CONNECTION_DURATION = 20;
+const CLIENT_CONNECTION_DURATION = 5;
 router.get("/isclientonline", async (req, res) => {
   let isClientOnline;
   if (lastClientConnection !== undefined) {
