@@ -26,11 +26,20 @@ function connectToDb({ database, host, user, password, pipePrototypeId }) {
 
     query = (sql) => {
       return new Promise((resolve, reject) => {
-        connection.query(sql, (error, result) => {
-          pool.releaseConnection(connection);
-          if (error) reject(error);
-          resolve(result);
+        pool.getConnection((error, connection) => {
+          if (error) throw error;
+          connection.query(sql, (error, result) => {
+            if (error) reject(error);
+            pool.releaseConnection(connection);
+            console.log("Realeased");
+            resolve(result);
+          });
         });
+        // connection.query(sql, (error, result) => {
+        //   pool.releaseConnection(connection);
+        //   if (error) reject(error);
+        //   resolve(result);
+        // });
       });
     };
   });
