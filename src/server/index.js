@@ -16,8 +16,10 @@ function runExpress({ port, password, corsWhitelist }) {
     cors.default({
       origin: (origin, callback) => {
         if (corsWhitelist.indexOf(origin) !== -1 || !origin) {
+          console.log(`Connection with ${origin}`);
           callback(null, true);
         } else {
+          console.log(`NO connection with ${origin}`);
           callback(null, false);
         }
       },

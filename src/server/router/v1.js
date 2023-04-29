@@ -8,7 +8,57 @@ import {
 import express from "express";
 const router = express.Router();
 
-router.get("/pipe", async (req, res) => {
+// no piperecords code:
+let lastClientConnection;
+const CLIENT_CONNECTION_DURATION = 20;
+router.get("/isclientonline", async (req, res) => {
+  let isClientOnline;
+  if (lastClientConnection !== undefined) {
+    const diffInSeconds = Math.abs(lastClientConnection - new Date()) / 1000;
+    if (diffInSeconds > CLIENT_CONNECTION_DURATION) {
+      isClientOnline = false;
+    } else if (diffInSeconds < CLIENT_CONNECTION_DURATION) {
+      isClientOnline = true;
+    }
+  } else {
+    isClientOnline = false;
+  }
+  res.status(200).send({ isClientOnline, lastClientConnection });
+});
+
+router.post("/isclientonline", async (req, res) => {
+  lastClientConnection = new Date();
+  res.status(200).send({ lastClientConnection });
+});
+
+let pipeVariables = {
+  airHumidity: undefined,
+  soilHumidity: undefined,
+  temperature: undefined,
+  light: undefined,
+  lastPipeConnection: undefined,
+};
+
+router.get("/pipenow", (req, res) => {
+  if (pipeVariables.lastPipeConnection == undefined) {
+    res.status(200).send({ message: "No live pipe comunication" });
+  } else {
+    res.send(JSON.stringify(pipeVariables));
+  }
+});
+
+router.post("/pipenow", (req, res) => {
+  const { body } = req;
+  pipeVariables.airHumidity = parseFloat(body.airHumidity).toFixed(2);
+  pipeVariables.soilHumidity = parseFloat(body.soilHumidity).toFixed(2);
+  pipeVariables.temperature = parseFloat(body.temperature).toFixed(2);
+  pipeVariables.light = parseFloat(body.light).toFixed(2);
+  pipeVariables.lastPipeConnection = Date.now();
+  res.status(203).send({ pipeVariables });
+});
+
+// piperecords code:
+router.get("/piperecords", async (req, res) => {
   const { headers } = req;
   let responseString;
 
@@ -30,7 +80,7 @@ router.get("/pipe", async (req, res) => {
   res.status(200).send(responseString);
 });
 
-router.post("/pipe", async (req, res) => {
+router.post("/piperecords", async (req, res) => {
   const { body, headers } = req;
   if (Boolean(headers["is-pipe"]) == true) {
     const response = await fetchVariableRecord({
