@@ -28,6 +28,7 @@ function connectToDb({ database, host, user, password, pipePrototypeId }) {
       return new Promise((resolve, reject) => {
         pool.getConnection((error, connection) => {
           if (error) throw error;
+          console.log(sql);
           connection.query(sql, (error, result) => {
             if (error) reject(error);
             pool.releaseConnection(connection);
@@ -45,9 +46,20 @@ function connectToDb({ database, host, user, password, pipePrototypeId }) {
   });
 }
 
+function convertToISO(date) {
+  // https://stackoverflow.com/questions/5129624/convert-js-date-time-to-mysql-datetime#comment92061514_11150727
+  return new Date(date).toISOString().slice(0, 19).replace("T", " ");
+}
+
 function datetimeNow() {
   // https://stackoverflow.com/questions/5129624/convert-js-date-time-to-mysql-datetime#comment92061514_11150727
-  return new Date().toISOString().slice(0, 19).replace("T", " ");
+  return convertToISO(new Date());
+}
+
+function addDays(date, days) {
+  var result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return convertToISO(result);
 }
 
 function pullVariableRecord({ date }, pipeId = PIPE_PROTOTYPE_ID) {
@@ -56,7 +68,10 @@ function pullVariableRecord({ date }, pipeId = PIPE_PROTOTYPE_ID) {
                 WHERE pipeId = ${pipeId}
                 ${
                   date
-                    ? `AND date BETWEEN "${date} 00:00:00" AND "${date} 23:59:59"`
+                    ? `AND date BETWEEN "${date} 05:00:00" AND "${addDays(
+                        date,
+                        1
+                      )} 05:00:00"`
                     : ""
                 }
                 ORDER BY date DESC`);
@@ -68,7 +83,10 @@ function pullProcessRecord({ date, limit }, pipeId = PIPE_PROTOTYPE_ID) {
                 WHERE pipeId = ${pipeId}
                 ${
                   date
-                    ? `AND date BETWEEN "${date} 00:00:00" AND "${date} 23:59:59"`
+                    ? `AND date BETWEEN "${date} 00:00:00" AND "${addDays(
+                        date,
+                        1
+                      )} 05:00:00"`
                     : ""
                 }
                 ORDER BY date DESC

@@ -66,7 +66,6 @@ router.get("/piperecords", async (req, res) => {
     const processRecord = await pullProcessRecord({ limit: 1 });
     responseString = JSON.stringify(processRecord[0]);
   } else if (Boolean(headers["is-client"]) == true) {
-    console.log(query.date);
     const processRecord = await pullProcessRecord({
       date: query.date,
     });
