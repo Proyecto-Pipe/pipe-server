@@ -59,15 +59,20 @@ router.post("/pipenow", (req, res) => {
 
 // piperecords code:
 router.get("/piperecords", async (req, res) => {
-  const { headers } = req;
+  const { headers, query } = req;
   let responseString;
 
   if (Boolean(headers["is-pipe"]) == true) {
     const processRecord = await pullProcessRecord({ limit: 1 });
     responseString = JSON.stringify(processRecord[0]);
   } else if (Boolean(headers["is-client"]) == true) {
-    const processRecord = await pullProcessRecord({});
-    const variableRecord = await pullVariableRecord({});
+    console.log(query.date);
+    const processRecord = await pullProcessRecord({
+      date: query.date,
+    });
+    const variableRecord = await pullVariableRecord({
+      date: query.date,
+    });
     responseString = JSON.stringify({ variableRecord, processRecord });
   } else {
     return res.send({

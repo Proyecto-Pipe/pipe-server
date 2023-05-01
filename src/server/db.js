@@ -50,33 +50,42 @@ function datetimeNow() {
   return new Date().toISOString().slice(0, 19).replace("T", " ");
 }
 
-function pullVariableRecord({ date1, date2 }, pipeId = PIPE_PROTOTYPE_ID) {
+function pullVariableRecord({ date }, pipeId = PIPE_PROTOTYPE_ID) {
   return query(`SELECT date, airHumidity, soilHumidity, temperature, light
                 FROM variablerecords
                 WHERE pipeId = ${pipeId}
-                ${date1 ? `AND date BETWEEN "${date1}" AND "${date2}"` : ""}
+                ${
+                  date
+                    ? `AND date BETWEEN "${date} 00:00:00" AND "${date} 23:59:59"`
+                    : ""
+                }
                 ORDER BY date DESC`);
 }
 
-function pullProcessRecord(
-  { date1, date2, limit },
-  pipeId = PIPE_PROTOTYPE_ID
-) {
+function pullProcessRecord({ date, limit }, pipeId = PIPE_PROTOTYPE_ID) {
   return query(`SELECT date, isBulbOn, isPumpOn, isFanOn, automation
                 FROM processrecords
                 WHERE pipeId = ${pipeId}
-                ${date1 ? `AND date BETWEEN "${date1}" AND "${date2}"` : ""}
+                ${
+                  date
+                    ? `AND date BETWEEN "${date} 00:00:00" AND "${date} 23:59:59"`
+                    : ""
+                }
                 ORDER BY date DESC
                 ${limit ? `LIMIT ${limit}` : ""}
                 `);
 }
 
-function fetchVariableRecord(
-  { airHumidity, soilHumidity, temperature, light },
-  pipeId = PIPE_PROTOTYPE_ID
-) {
+function fetchVariableRecord(variables, pipeId = PIPE_PROTOTYPE_ID) {
+  for (const variable in variables) {
+    if (isNaN(variables[variable]) === true) {
+      variables[variable] = 0.0;
+    }
+  }
   return query(`INSERT INTO variablerecords (date, airHumidity, soilHumidity, temperature, light, pipeId)
-                VALUES ("${datetimeNow()}", ${airHumidity}, ${soilHumidity}, ${temperature}, ${light}, ${pipeId})`);
+                VALUES ("${datetimeNow()}", ${variables.airHumidity}, ${
+    variables.soilHumidity
+  }, ${variables.temperature}, ${variables.light}, ${pipeId})`);
 }
 
 function fetchProcessRecord(
