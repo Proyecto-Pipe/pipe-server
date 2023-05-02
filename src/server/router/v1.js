@@ -95,13 +95,31 @@ router.post("/piperecords", async (req, res) => {
     });
     res.status(203).send(response);
   } else if (Boolean(headers["is-client"]) == true) {
-    const response = await fetchProcessRecord({
+    const processRecord = await pullProcessRecord({ limit: 1 });
+    const oldProcessRecord = processRecord[0];
+    const newProcessRecord = {
       isBulbOn: body.isBulbOn,
       isFanOn: body.isFanOn,
       isPumpOn: body.isPumpOn,
       automation: body.automation,
-    });
-    res.status(203).send(response);
+    };
+    console.log(oldProcessRecord);
+    if (oldProcessRecord === undefined) {
+      const response = await fetchProcessRecord(newProcessRecord);
+      res.status(203).send(response);
+    } else if (
+      newProcessRecord.isBulbOn !== oldProcessRecord.isBulbOn ||
+      newProcessRecord.isFanOn !== oldProcessRecord.isFanOn ||
+      newProcessRecord.isPumpOn !== oldProcessRecord.isPumpOn ||
+      newProcessRecord.automation !== oldProcessRecord.automation
+    ) {
+      console.log("save");
+      const response = await fetchProcessRecord(newProcessRecord);
+      res.status(203).send(response);
+    } else {
+      console.log("dont save");
+      res.status(203).send({ message: "Same as before" });
+    }
   }
 });
 
