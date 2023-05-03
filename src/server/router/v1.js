@@ -5,6 +5,8 @@ import {
   fetchProcessRecord,
 } from "../db.js";
 
+import { checkUserCode } from "../checkUserCode.js";
+
 import express from "express";
 const router = express.Router();
 
@@ -95,6 +97,10 @@ router.post("/piperecords", async (req, res) => {
     });
     res.status(203).send(response);
   } else if (Boolean(headers["is-client"]) == true) {
+    const userCode = String(headers["user-code"]);
+    if (!checkUserCode(userCode)) {
+      return res.status(403).send({ message: "Wrong user code" });
+    }
     const processRecord = await pullProcessRecord({ limit: 1 });
     const oldProcessRecord = processRecord[0];
     const newProcessRecord = {
