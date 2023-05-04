@@ -59,6 +59,17 @@ router.post("/pipenow", (req, res) => {
   res.status(203).send({ pipeVariables });
 });
 
+// isUserCodeValid code:
+router.get("/isusercodevalid", async (req, res) => {
+  const { headers } = req;
+  const userCode = String(headers["user-code"]);
+  if (checkUserCode(userCode)) {
+    return res.status(200).send({ message: "User code valid" });
+  } else {
+    return res.status(200).send({ message: "User code invalid" });
+  }
+});
+
 // piperecords code:
 router.get("/piperecords", async (req, res) => {
   const { headers, query } = req;
