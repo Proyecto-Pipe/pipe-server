@@ -77,7 +77,7 @@ function pullProcessRecord({ date, limit }, pipeId = PIPE_PROTOTYPE_ID) {
                 WHERE pipeId = ${pipeId}
                 ${
                   date
-                    ? `AND date BETWEEN "${date} 00:00:00" AND "${addDays(
+                    ? `AND date BETWEEN "${date} 05:00:00" AND "${addDays(
                         date,
                         1
                       )} 05:00:00"`
