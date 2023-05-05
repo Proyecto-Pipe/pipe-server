@@ -26,11 +26,13 @@ router.get("/isclientonline", async (req, res) => {
     isClientOnline = false;
   }
   res.status(200).send({ isClientOnline, lastClientConnection });
+  console.log("GET isclientonline");
 });
 
 router.post("/isclientonline", async (req, res) => {
   lastClientConnection = new Date();
   res.status(200).send({ lastClientConnection });
+  console.log("POST isclientonline");
 });
 
 let pipeVariables = {
@@ -47,6 +49,7 @@ router.get("/pipenow", (req, res) => {
   } else {
     res.send(JSON.stringify(pipeVariables));
   }
+  console.log("GET pipenow");
 });
 
 router.post("/pipenow", (req, res) => {
@@ -57,6 +60,7 @@ router.post("/pipenow", (req, res) => {
   pipeVariables.light = parseFloat(body.light).toFixed(2);
   pipeVariables.lastPipeConnection = Date.now();
   res.status(203).send({ pipeVariables });
+  console.log("POST pipenow");
 });
 
 // isUserCodeValid code:
@@ -64,10 +68,11 @@ router.get("/isusercodevalid", async (req, res) => {
   const { headers } = req;
   const userCode = String(headers["user-code"]);
   if (checkUserCode(userCode)) {
-    return res.status(200).send({ message: "User code valid" });
+    res.status(200).send({ message: "User code valid" });
   } else {
-    return res.status(200).send({ message: "User code invalid" });
+    res.status(200).send({ message: "User code invalid" });
   }
+  console.log("GET isusercodevalid");
 });
 
 // piperecords code:
@@ -78,6 +83,7 @@ router.get("/piperecords", async (req, res) => {
   if (Boolean(headers["is-pipe"]) == true) {
     const processRecord = await pullProcessRecord({ limit: 1 });
     responseString = JSON.stringify(processRecord[0]);
+    console.log("GET piperecords FROM pipe");
   } else if (Boolean(headers["is-client"]) == true) {
     const processRecord = await pullProcessRecord({
       date: query.date,
@@ -86,6 +92,7 @@ router.get("/piperecords", async (req, res) => {
       date: query.date,
     });
     responseString = JSON.stringify({ variableRecord, processRecord });
+    console.log("GET piperecords FROM client");
   } else {
     return res.send({
       message: 'Must send in header "is-pipe" or "is-client"',
@@ -107,6 +114,7 @@ router.post("/piperecords", async (req, res) => {
       light: parseFloat(body.light).toFixed(2),
     });
     res.status(203).send(response);
+    console.log("POST piperecords FROM pipe");
   } else if (Boolean(headers["is-client"]) == true) {
     const userCode = String(headers["user-code"]);
     if (!checkUserCode(userCode)) {
@@ -120,22 +128,22 @@ router.post("/piperecords", async (req, res) => {
       isPumpOn: body.isPumpOn,
       automation: body.automation,
     };
-    console.log(oldProcessRecord);
     if (oldProcessRecord === undefined) {
       const response = await fetchProcessRecord(newProcessRecord);
       res.status(203).send(response);
+      console.log("POST piperecords FROM client: Saved process");
     } else if (
       newProcessRecord.isBulbOn !== oldProcessRecord.isBulbOn ||
       newProcessRecord.isFanOn !== oldProcessRecord.isFanOn ||
       newProcessRecord.isPumpOn !== oldProcessRecord.isPumpOn ||
       newProcessRecord.automation !== oldProcessRecord.automation
     ) {
-      console.log("save");
       const response = await fetchProcessRecord(newProcessRecord);
       res.status(203).send(response);
+      console.log("POST piperecords FROM client: Saved process");
     } else {
-      console.log("dont save");
       res.status(203).send({ message: "Same as before" });
+      console.log("POST piperecords FROM client: Didn't save process");
     }
   }
 });

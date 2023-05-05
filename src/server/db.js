@@ -6,6 +6,8 @@ let query = (sql) => {
   // throw new Error("Not query function defined, connection not started");
 };
 
+let querysMade = 0;
+
 function connectToDb({ database, host, user, password, pipePrototypeId }) {
   PIPE_PROTOTYPE_ID = pipePrototypeId;
 
@@ -31,7 +33,8 @@ function connectToDb({ database, host, user, password, pipePrototypeId }) {
           connection.query(sql, (error, result) => {
             if (error) reject(error);
             pool.releaseConnection(connection);
-            console.log("Realeased");
+            querysMade += 1;
+            console.log(`Querys made: ${querysMade}`);
             resolve(result);
           });
         });
@@ -40,20 +43,24 @@ function connectToDb({ database, host, user, password, pipePrototypeId }) {
   });
 }
 
-function convertToISO(date) {
+function convertDatetimeToISO(datetime) {
   // https://stackoverflow.com/questions/5129624/convert-js-date-time-to-mysql-datetime#comment92061514_11150727
+  return new Date(datetime).toISOString().slice(0, 19).replace("T", " ");
+}
+
+function convertDateToISO(date) {
   return new Date(date).toISOString().slice(0, 10).replace("T", " ");
 }
 
 function datetimeNow() {
   // https://stackoverflow.com/questions/5129624/convert-js-date-time-to-mysql-datetime#comment92061514_11150727
-  return convertToISO(new Date());
+  return convertDatetimeToISO(new Date());
 }
 
 function addDays(date, days) {
   var result = new Date(date);
   result.setDate(result.getDate() + days);
-  return convertToISO(result);
+  return convertDateToISO(result);
 }
 
 function pullVariableRecord({ date }, pipeId = PIPE_PROTOTYPE_ID) {
