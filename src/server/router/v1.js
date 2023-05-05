@@ -43,11 +43,22 @@ let pipeVariables = {
   lastPipeConnection: undefined,
 };
 
-router.get("/pipenow", (req, res) => {
+let pipeActualProcess = undefined;
+
+async function setPipeActualProcess() {
+  const processRecord = await pullProcessRecord({ limit: 1 });
+  pipeActualProcess = processRecord[0];
+}
+
+router.get("/pipenow", async (req, res) => {
   if (pipeVariables.lastPipeConnection == undefined) {
     res.status(200).send({ message: "No live pipe comunication" });
   } else {
-    res.send(JSON.stringify(pipeVariables));
+    if (pipeActualProcess === undefined) {
+      await setPipeActualProcess();
+    }
+    const data = { ...pipeVariables, ...pipeActualProcess };
+    res.send(JSON.stringify(data));
   }
   console.log("GET pipenow FROM client");
 });
@@ -81,8 +92,10 @@ router.get("/piperecords", async (req, res) => {
   let responseString;
 
   if (Boolean(headers["is-pipe"]) == true) {
-    const processRecord = await pullProcessRecord({ limit: 1 });
-    responseString = JSON.stringify(processRecord[0]);
+    if (pipeActualProcess === undefined) {
+      await setPipeActualProcess();
+    }
+    responseString = JSON.stringify(pipeActualProcess);
     console.log("GET piperecords FROM pipe");
   } else if (Boolean(headers["is-client"]) == true) {
     const processRecord = await pullProcessRecord({
@@ -120,25 +133,25 @@ router.post("/piperecords", async (req, res) => {
     if (!checkUserCode(userCode)) {
       return res.status(403).send({ message: "Wrong user code" });
     }
-    const processRecord = await pullProcessRecord({ limit: 1 });
-    const oldProcessRecord = processRecord[0];
     const newProcessRecord = {
       isBulbOn: body.isBulbOn,
       isFanOn: body.isFanOn,
       isPumpOn: body.isPumpOn,
       automation: body.automation,
     };
-    if (oldProcessRecord === undefined) {
+    if (pipeActualProcess === undefined) {
       const response = await fetchProcessRecord(newProcessRecord);
+      pipeActualProcess = newProcessRecord;
       res.status(203).send(response);
       console.log("POST piperecords FROM client: Saved process");
     } else if (
-      newProcessRecord.isBulbOn !== oldProcessRecord.isBulbOn ||
-      newProcessRecord.isFanOn !== oldProcessRecord.isFanOn ||
-      newProcessRecord.isPumpOn !== oldProcessRecord.isPumpOn ||
-      newProcessRecord.automation !== oldProcessRecord.automation
+      newProcessRecord.isBulbOn !== pipeActualProcess.isBulbOn ||
+      newProcessRecord.isFanOn !== pipeActualProcess.isFanOn ||
+      newProcessRecord.isPumpOn !== pipeActualProcess.isPumpOn ||
+      newProcessRecord.automation !== pipeActualProcess.automation
     ) {
       const response = await fetchProcessRecord(newProcessRecord);
+      pipeActualProcess = newProcessRecord;
       res.status(203).send(response);
       console.log("POST piperecords FROM client: Saved process");
     } else {
