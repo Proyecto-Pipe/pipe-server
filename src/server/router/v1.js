@@ -26,13 +26,13 @@ router.get("/isclientonline", async (req, res) => {
     isClientOnline = false;
   }
   res.status(200).send({ isClientOnline, lastClientConnection });
-  console.log("GET isclientonline");
+  console.log("GET isclientonline FROM pipe");
 });
 
 router.post("/isclientonline", async (req, res) => {
   lastClientConnection = new Date();
   res.status(200).send({ lastClientConnection });
-  console.log("POST isclientonline");
+  console.log("POST isclientonline FROM client");
 });
 
 let pipeVariables = {
@@ -49,7 +49,7 @@ router.get("/pipenow", (req, res) => {
   } else {
     res.send(JSON.stringify(pipeVariables));
   }
-  console.log("GET pipenow");
+  console.log("GET pipenow FROM client");
 });
 
 router.post("/pipenow", (req, res) => {
@@ -60,7 +60,7 @@ router.post("/pipenow", (req, res) => {
   pipeVariables.light = parseFloat(body.light).toFixed(2);
   pipeVariables.lastPipeConnection = Date.now();
   res.status(203).send({ pipeVariables });
-  console.log("POST pipenow");
+  console.log("POST pipenow FROM pipe");
 });
 
 // isUserCodeValid code:
@@ -72,7 +72,7 @@ router.get("/isusercodevalid", async (req, res) => {
   } else {
     res.status(200).send({ message: "User code invalid" });
   }
-  console.log("GET isusercodevalid");
+  console.log("GET isusercodevalid FROM client");
 });
 
 // piperecords code:
