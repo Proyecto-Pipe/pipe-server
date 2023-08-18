@@ -5,7 +5,7 @@ import { runExpress } from "./server/index.js";
 import { connectToDb } from "./server/db.js";
 
 const password = parseInt(process.env.PASSWORD);
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
 
 const dev_mode = parseInt(process.env.DEV_MODE);
 console.log("Dev mode: ");
