@@ -8,12 +8,18 @@ let query = (sql) => {
 
 let querysMade = 0;
 
-function connectToDb({ database, host, user, password, pipePrototypeId }) {
+function connectToDb({
+  database,
+  socketPath,
+  user,
+  password,
+  pipePrototypeId,
+}) {
   PIPE_PROTOTYPE_ID = pipePrototypeId;
 
   const pool = mysql.createPool({
     database,
-    host,
+    socketPath,
     user,
     password,
     waitForConnections: true,

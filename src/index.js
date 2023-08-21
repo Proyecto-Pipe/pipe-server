@@ -24,7 +24,8 @@ runExpress({ port, password, corsWhitelist });
 
 connectToDb({
   database: process.env.DB_SCHEMA,
-  host: process.env.DB_HOST,
+  // host: process.env.DB_HOST,
+  socketPath: process.env.DB_SOCKET_PATH,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   pipePrototypeId: process.env.PIPE_PROTOTYPE_ID,
